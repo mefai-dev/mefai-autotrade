@@ -292,7 +292,7 @@ data:
   snapshot_interval_seconds: 60
 
   # Binance kline proxy (for rate limit bypass)
-  kline_proxy: "http://REDACTED:9500/fapi/klines"
+  kline_proxy: "" # Set via MEFAI_KLINE_PROXY env var
   use_proxy: true
 
   # Websocket
@@ -412,7 +412,7 @@ api:
   host: "0.0.0.0"
   port: 8100
   workers: 1
-  cors_origins: ["*"]
+  cors_origins: ["https://mefai.io"]
   api_key: "${MEFAI_API_KEY}"         # for API authentication
   websocket_path: "/ws"
   rate_limit:

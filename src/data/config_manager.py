@@ -300,7 +300,9 @@ class SecretManager:
     """
 
     def __init__(self, key: Optional[str] = None):
-        self._key = key or os.environ.get("MEFAI_CONFIG_KEY", "mefai-autotrade-default")
+        self._key = key or os.environ.get("MEFAI_CONFIG_KEY", "")
+        if not self._key:
+            raise ValueError("MEFAI_CONFIG_KEY environment variable is required for secret management")
         self._secrets: Dict[str, str] = {}
         self._lock = threading.Lock()
 
