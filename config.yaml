@@ -1,0 +1,461 @@
+# =============================================================================
+# Mefai Autotrade - Configuration
+# =============================================================================
+# Copy this file to config.local.yaml and customize for your environment.
+# Environment variables can override any value using MEFAI_ prefix.
+# Example: MEFAI_EXCHANGE_API_KEY overrides exchange.api_key
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# General
+# -----------------------------------------------------------------------------
+general:
+  name: "mefai-autotrade"
+  version: "1.0.0"
+  environment: "production"           # production, staging, development
+  log_level: "INFO"                   # DEBUG, INFO, WARNING, ERROR
+  log_file: "logs/autotrade.log"
+  log_rotation: "50MB"
+  timezone: "UTC"
+
+# -----------------------------------------------------------------------------
+# Exchange Configuration
+# -----------------------------------------------------------------------------
+exchange:
+  name: "binance"
+  api_key: "${BINANCE_API_KEY}"
+  api_secret: "${BINANCE_API_SECRET}"
+  testnet: false                      # true for paper trading
+  testnet_api_key: "${BINANCE_TESTNET_API_KEY}"
+  testnet_api_secret: "${BINANCE_TESTNET_API_SECRET}"
+  market_type: "futures"              # spot, futures, margin
+  default_leverage: 5
+  max_leverage: 20
+  recv_window: 5000                   # milliseconds
+  rate_limit_buffer: 0.8             # use 80% of rate limit capacity
+  proxy: null                         # HTTP proxy URL if needed
+  backup_exchanges:                   # failover exchanges
+    - name: "bybit"
+      api_key: "${BYBIT_API_KEY}"
+      api_secret: "${BYBIT_API_SECRET}"
+    - name: "okx"
+      api_key: "${OKX_API_KEY}"
+      api_secret: "${OKX_API_SECRET}"
+
+# -----------------------------------------------------------------------------
+# Strategy Configuration
+# -----------------------------------------------------------------------------
+strategies:
+  enabled:
+    - momentum
+    - trend_following
+    - mean_reversion
+    - breakout
+    - grid_trading
+    - smart_money
+    - machine_learning
+    - scalping
+
+  # Per-strategy parameters
+  momentum:
+    enabled: true
+    symbols: ["BTCUSDT", "ETHUSDT", "BNBUSDT", "SOLUSDT"]
+    timeframe: "5m"
+    rsi_period: 14
+    macd_fast: 12
+    macd_slow: 26
+    macd_signal: 9
+    adx_threshold: 25
+    min_confidence: 0.6
+    max_position_size: 0.1            # 10% of capital per position
+    max_daily_trades: 20
+
+  trend_following:
+    enabled: true
+    symbols: ["BTCUSDT", "ETHUSDT"]
+    timeframe: "15m"
+    supertrend_period: 10
+    supertrend_multiplier: 3.0
+    ema_fast: 9
+    ema_slow: 21
+    adx_threshold: 20
+    min_confidence: 0.55
+    max_position_size: 0.15
+
+  mean_reversion:
+    enabled: true
+    symbols: ["BTCUSDT", "ETHUSDT", "BNBUSDT"]
+    timeframe: "5m"
+    bb_period: 20
+    bb_std: 2.0
+    zscore_entry: 2.0
+    zscore_exit: 0.5
+    max_hold_bars: 50
+    min_confidence: 0.6
+
+  breakout:
+    enabled: true
+    symbols: ["BTCUSDT", "ETHUSDT", "SOLUSDT"]
+    timeframe: "15m"
+    lookback: 20
+    volume_multiplier: 2.0
+    atr_stop_multiplier: 2.0
+    false_breakout_filter: true
+    min_confidence: 0.65
+
+  grid_trading:
+    enabled: true
+    symbols: ["BTCUSDT", "ETHUSDT"]
+    timeframe: "1m"
+    num_grids: 10
+    grid_type: "arithmetic"           # arithmetic, geometric
+    total_investment: 1000.0
+    upper_price: 0                    # 0 = auto-detect from ATR
+    lower_price: 0
+    take_profit_pct: 0.3
+
+  smart_money:
+    enabled: true
+    symbols: ["BTCUSDT", "ETHUSDT"]
+    htf_timeframe: "4h"
+    ltf_timeframe: "15m"
+    min_confluence: 3
+    order_block_lookback: 50
+    fvg_min_size_pct: 0.1
+    min_confidence: 0.7
+
+  machine_learning:
+    enabled: true
+    symbols: ["BTCUSDT", "ETHUSDT", "BNBUSDT", "SOLUSDT"]
+    timeframe: "5m"
+    model_type: "xgboost"             # xgboost, random_forest, neural_net
+    confidence_threshold: 0.6
+    retrain_interval_hours: 24
+    feature_lookback: 100
+    model_path: "models/"
+
+  scalping:
+    enabled: true
+    symbols: ["BTCUSDT", "ETHUSDT"]
+    timeframe: "1m"
+    target_pct: 0.2
+    max_hold_minutes: 15
+    max_trades_per_hour: 10
+    spread_filter: 0.02               # skip if spread > 0.02%
+
+  dca:
+    enabled: false
+    symbols: ["BTCUSDT"]
+    interval_hours: 24
+    buy_amount: 100.0
+    dip_threshold_pct: 5.0
+    max_positions: 10
+
+  arbitrage:
+    enabled: false
+    min_spread_pct: 0.1
+    max_exposure: 10000.0
+    exchanges: ["binance", "bybit"]
+
+  market_making:
+    enabled: false
+    symbols: ["BTCUSDT"]
+    spread_bps: 10
+    max_inventory: 100.0
+    refresh_interval_sec: 5
+
+  pairs_trading:
+    enabled: false
+    pairs: [["BTCUSDT", "ETHUSDT"]]
+    zscore_entry: 2.0
+    zscore_exit: 0.5
+    lookback: 60
+
+  volume_profile:
+    enabled: false
+    symbols: ["BTCUSDT"]
+    num_bins: 50
+    value_area_pct: 70.0
+
+  elliott_wave:
+    enabled: false
+    symbols: ["BTCUSDT"]
+    min_wave_pct: 1.0
+    fib_tolerance: 0.05
+
+  order_flow:
+    enabled: false
+    symbols: ["BTCUSDT"]
+    cvd_lookback: 50
+    delta_threshold: 0.3
+
+  composite:
+    enabled: false
+    strategies: ["momentum", "trend_following", "smart_money"]
+    voting_threshold: 0.6
+    min_strategies: 2
+
+# -----------------------------------------------------------------------------
+# Risk Management
+# -----------------------------------------------------------------------------
+risk:
+  # Position sizing
+  max_position_pct: 10.0              # max 10% of capital per position
+  default_risk_per_trade_pct: 1.0     # risk 1% of capital per trade
+  max_open_positions: 10
+  max_correlated_positions: 3         # max positions in correlated assets
+
+  # Portfolio limits
+  max_portfolio_drawdown_pct: 15.0    # halt all trading at 15% drawdown
+  max_daily_loss_pct: 5.0             # halt trading for the day at 5% loss
+  max_daily_trades: 100
+  max_weekly_loss_pct: 10.0
+
+  # Stop loss
+  default_stop_loss_pct: 2.0
+  max_stop_loss_pct: 5.0
+  trailing_stop_atr_multiplier: 2.0
+  trailing_stop_activation_pct: 1.0   # activate trailing after 1% profit
+
+  # Take profit
+  default_take_profit_pct: 4.0
+  partial_take_profit:
+    - level_pct: 2.0
+      close_pct: 33                   # close 33% at 2% profit
+    - level_pct: 4.0
+      close_pct: 33                   # close 33% at 4% profit
+    - level_pct: 6.0
+      close_pct: 100                  # close remaining at 6% profit
+
+  # Leverage
+  max_leverage: 20
+  default_leverage: 5
+  dynamic_leverage: true              # reduce leverage in high volatility
+
+  # Circuit breakers
+  circuit_breaker:
+    consecutive_losses: 5             # pause after 5 consecutive losses
+    pause_minutes: 60                 # pause duration
+    drawdown_pause_pct: 10.0          # pause at 10% drawdown
+    drawdown_pause_hours: 4
+
+  # Correlation filter
+  correlation:
+    max_correlation: 0.85             # block new position if corr > 0.85
+    lookback_periods: 100
+    check_interval_minutes: 15
+
+# -----------------------------------------------------------------------------
+# Execution
+# -----------------------------------------------------------------------------
+execution:
+  default_order_type: "LIMIT"         # LIMIT, MARKET
+  default_algo: "twap"                # twap, vwap, iceberg, market
+  slippage_tolerance_pct: 0.1
+  retry_attempts: 3
+  retry_delay_seconds: 2
+  order_timeout_seconds: 30
+  use_reduce_only: true               # use reduce-only for closing positions
+  post_only: false                    # maker-only orders
+
+  # TWAP settings
+  twap:
+    num_slices: 5
+    interval_seconds: 30
+    randomize_interval: true          # add random jitter
+
+  # VWAP settings
+  vwap:
+    participation_rate: 0.1           # 10% of volume
+    max_deviation_pct: 0.5
+
+  # Iceberg settings
+  iceberg:
+    visible_pct: 20                   # show 20% of total order
+    replenish_delay_ms: 500
+
+  # Smart routing
+  smart_routing:
+    enabled: true
+    check_orderbook_depth: true
+    min_orderbook_depth_usdt: 50000
+    prefer_maker: true
+
+# -----------------------------------------------------------------------------
+# Data
+# -----------------------------------------------------------------------------
+data:
+  database_path: "data/autotrade.db"
+  candle_retention_days: 90
+  trade_history_retention_days: 365
+  tick_buffer_size: 10000
+  snapshot_interval_seconds: 60
+
+  # Binance kline proxy (for rate limit bypass)
+  kline_proxy: "http://REDACTED:9500/fapi/klines"
+  use_proxy: true
+
+  # Websocket
+  websocket:
+    reconnect_delay_seconds: 5
+    max_reconnect_attempts: 10
+    ping_interval_seconds: 30
+    subscribe_depth: true
+    subscribe_trades: true
+    subscribe_klines: true
+
+  # Meme coin prefix mapping
+  meme_prefix:
+    PEPE: "1000PEPEUSDT"
+    FLOKI: "1000FLOKIUSDT"
+    SHIB: "1000SHIBUSDT"
+    BONK: "1000BONKUSDT"
+
+# -----------------------------------------------------------------------------
+# Portfolio Management
+# -----------------------------------------------------------------------------
+portfolio:
+  allocation_method: "risk_parity"    # equal, risk_parity, mean_variance, kelly,
+                                      # max_diversification, min_variance,
+                                      # risk_budgeting, dynamic
+  total_capital: 10000.0
+  risk_free_rate: 0.04                # 4% annual risk-free rate
+
+  # Rebalancing
+  rebalance_frequency: "daily"        # hourly, daily, weekly, monthly, quarterly
+  rebalance_mode: "cost_aware"        # immediate, gradual, tax_aware, cost_aware
+  drift_threshold_pct: 5.0            # rebalance when drift exceeds 5%
+  min_rebalance_interval_hours: 4
+  max_turnover_pct: 30.0              # max 30% turnover per rebalance
+  gradual_steps: 3                    # for gradual rebalancing mode
+
+  # Allocation constraints
+  constraints:
+    momentum:
+      min_weight: 0.05
+      max_weight: 0.30
+    trend_following:
+      min_weight: 0.05
+      max_weight: 0.30
+    mean_reversion:
+      min_weight: 0.05
+      max_weight: 0.25
+    breakout:
+      min_weight: 0.0
+      max_weight: 0.20
+    smart_money:
+      min_weight: 0.05
+      max_weight: 0.25
+    machine_learning:
+      min_weight: 0.0
+      max_weight: 0.20
+
+  # Copy trading
+  copy_trading:
+    enabled: false
+    max_masters: 5
+    default_size_multiplier: 1.0
+    default_delay_seconds: 0
+    max_daily_copy_trades: 50
+
+# -----------------------------------------------------------------------------
+# Monitoring and Alerting
+# -----------------------------------------------------------------------------
+monitoring:
+  # Prometheus metrics
+  prometheus:
+    enabled: true
+    port: 9090
+    path: "/metrics"
+
+  # Health check
+  health_check:
+    enabled: true
+    port: 8100
+    path: "/health"
+    interval_seconds: 30
+
+  # Notifications
+  notifications:
+    telegram:
+      enabled: true
+      bot_token: "${TELEGRAM_BOT_TOKEN}"
+      chat_id: "${TELEGRAM_CHAT_ID}"
+      alert_on:
+        - trade_executed
+        - daily_summary
+        - error
+        - circuit_breaker
+        - drawdown_warning
+
+    discord:
+      enabled: false
+      webhook_url: "${DISCORD_WEBHOOK_URL}"
+      alert_on:
+        - trade_executed
+        - daily_summary
+        - error
+
+  # Alert thresholds
+  alerts:
+    drawdown_warning_pct: 5.0         # warn at 5% drawdown
+    drawdown_critical_pct: 10.0       # critical at 10% drawdown
+    daily_loss_warning_pct: 3.0
+    consecutive_loss_warning: 3
+    position_hold_warning_hours: 24   # warn if position held > 24h
+    latency_warning_ms: 500           # warn if order latency > 500ms
+
+# -----------------------------------------------------------------------------
+# API Server
+# -----------------------------------------------------------------------------
+api:
+  host: "0.0.0.0"
+  port: 8100
+  workers: 1
+  cors_origins: ["*"]
+  api_key: "${MEFAI_API_KEY}"         # for API authentication
+  websocket_path: "/ws"
+  rate_limit:
+    requests_per_minute: 120
+    burst: 20
+
+# -----------------------------------------------------------------------------
+# Backtesting
+# -----------------------------------------------------------------------------
+backtesting:
+  data_dir: "data/historical/"
+  default_start_date: "2024-01-01"
+  default_end_date: "2025-01-01"
+  initial_capital: 10000.0
+  commission_pct: 0.04                # 0.04% per trade
+  slippage_pct: 0.02                  # 0.02% simulated slippage
+  enable_shorting: true
+  use_adjusted_close: true
+  walk_forward:
+    enabled: true
+    train_periods: 60                 # days
+    test_periods: 20                  # days
+    anchored: false                   # expanding window if true
+
+# -----------------------------------------------------------------------------
+# Machine Learning
+# -----------------------------------------------------------------------------
+ml:
+  model_dir: "models/"
+  training:
+    min_samples: 1000                 # minimum rows before training
+    retrain_cron: "0 4 * * *"         # retrain at 4 AM daily
+    validation_split: 0.2
+    cross_validation_folds: 5
+    early_stopping_rounds: 50
+    max_features: 100
+  features:
+    technical: true                   # RSI, MACD, BB, etc.
+    volume: true                      # volume profile features
+    order_flow: true                  # CVD, delta
+    sentiment: false                  # news sentiment (requires API key)
+    on_chain: false                   # on-chain metrics
+  ensemble:
+    enabled: true
+    models: ["xgboost", "random_forest", "neural_net"]
+    voting: "soft"                    # soft (probability avg) or hard (majority)
