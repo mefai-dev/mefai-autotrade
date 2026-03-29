@@ -3,9 +3,9 @@
 [![CI](https://github.com/mefai-dev/mefai-autotrade/actions/workflows/ci.yml/badge.svg)](https://github.com/mefai-dev/mefai-autotrade/actions/workflows/ci.yml) [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 
 
-**Institutional-grade automated trading engine for cryptocurrency markets.**
+**Institutional grade automated trading engine for cryptocurrency markets.**
 
-Built for professional traders and funds that need reliable, battle-tested infrastructure for algorithmic trading across multiple exchanges. Mefai Autotrade combines 20+ trading strategies, advanced portfolio management, intelligent risk controls, and production-grade execution into a single cohesive system.
+Built for professional traders and funds that need reliable and battle tested infrastructure for algorithmic trading across multiple exchanges. Mefai Autotrade combines 20+ trading strategies, advanced portfolio management, intelligent risk controls, and production grade execution into a single cohesive system.
 
 ```
     MARKET DATA          STRATEGIES           EXECUTION          EXCHANGE
@@ -39,7 +39,7 @@ Built for professional traders and funds that need reliable, battle-tested infra
        |         |               |        |________________|
        |-------->| BACKTESTER    |
        |         |               |        ________________
-       |         | Walk-Forward  |       |                |
+       |         | Walk Forward  |       |                |
        |         | Monte Carlo   |------>| MONITORING     |
        |         | Optimization  |       |                |
        |         |_______________|       | Prometheus     |
@@ -76,7 +76,7 @@ Built for professional traders and funds that need reliable, battle-tested infra
 ### Core Engine
 - **20+ trading strategies** from scalping to portfolio-level allocation
 - **Multi-exchange support** via CCXT with automatic failover
-- **Real-time execution** with sub-second signal-to-order latency
+- **Real time execution** with sub-second signal-to-order latency
 - **Strategy registry** with factory pattern for dynamic strategy loading
 - **Composite strategies** with weighted voting and conflict resolution
 
@@ -116,7 +116,7 @@ Built for professional traders and funds that need reliable, battle-tested infra
 ### Monitoring
 - Prometheus metrics export
 - Telegram and Discord notifications
-- Real-time WebSocket dashboard feed
+- Real time WebSocket dashboard feed
 - Health check endpoint for orchestration systems
 
 ---
@@ -125,18 +125,18 @@ Built for professional traders and funds that need reliable, battle-tested infra
 
 | # | Strategy | Description | Timeframes | Style |
 |---|----------|-------------|------------|-------|
-| 1 | **Momentum** | Multi-indicator momentum with RSI, MACD, ADX confluence | 5m, 15m | Swing |
+| 1 | **Momentum** | Multi indicator momentum with RSI, MACD, ADX confluence | 5m, 15m | Swing |
 | 2 | **Trend Following** | Supertrend + EMA ribbon + Ichimoku cloud | 15m, 1h | Trend |
 | 3 | **Mean Reversion** | Bollinger Band + z-score statistical mean reversion | 5m, 15m | Mean Rev |
 | 4 | **Breakout** | Range breakout with volume confirmation and false breakout filter | 15m, 1h | Breakout |
 | 5 | **Grid Trading** | Arithmetic/geometric grid for ranging markets | 1m, 5m | Grid |
-| 6 | **Scalping** | High-frequency micro-trend scalping with spread filter | 1m | Scalp |
+| 6 | **Scalping** | High frequency micro-trend scalping with spread filter | 1m | Scalp |
 | 7 | **Smart Money** | ICT concepts - order blocks, FVG, BOS, liquidity sweeps | 15m, 4h | SMC |
 | 8 | **Machine Learning** | XGBoost/RF ensemble consuming 100+ engineered features | 5m | ML |
-| 9 | **DCA** | Intelligent dollar-cost averaging with dip detection | 1h, 4h | DCA |
-| 10 | **Arbitrage** | Cross-exchange spread and funding rate arbitrage | Real-time | Arb |
-| 11 | **Market Making** | Inventory-aware quoting with dynamic spread adjustment | 1m | MM |
-| 12 | **Pairs Trading** | Cointegration-based statistical pairs with z-score entry/exit | 5m, 15m | Stat Arb |
+| 9 | **DCA** | Intelligent dollar cost averaging with dip detection | 1h, 4h | DCA |
+| 10 | **Arbitrage** | Cross exchange spread and funding rate arbitrage | Real time | Arb |
+| 11 | **Market Making** | Inventory aware quoting with dynamic spread adjustment | 1m | MM |
+| 12 | **Pairs Trading** | Cointegration based statistical pairs with z score entry/exit | 5m, 15m | Stat Arb |
 | 13 | **Volume Profile** | POC, value area, and VWAP-based entry/exit | 5m, 15m | Volume |
 | 14 | **Elliott Wave** | Automated wave counting with Fibonacci projections | 1h, 4h | Wave |
 | 15 | **Order Flow** | CVD divergence, delta analysis, absorption detection | 1m, 5m | Flow |
@@ -337,7 +337,7 @@ Exposed at `http://localhost:9090/metrics`:
 
 **Discord** - Same alert types via webhook integration.
 
-**WebSocket** - Real-time feed for custom dashboards at `/ws`.
+**WebSocket** - Real time feed for custom dashboards at `/ws`.
 
 ### Alert Thresholds
 
@@ -560,12 +560,12 @@ mefai-autotrade/
 |   |   |-- mean_reversion.py        # Bollinger Band + z-score
 |   |   |-- breakout.py              # Range breakout + volume
 |   |   |-- grid_trading.py          # Arithmetic/geometric grid
-|   |   |-- scalping.py              # High-frequency micro-trend
+|   |   |-- scalping.py              # High frequency micro-trend
 |   |   |-- smart_money.py           # ICT order blocks, FVG, BOS
 |   |   |-- machine_learning.py      # XGBoost/RF/NN ensemble
 |   |   |-- dca.py                   # Dollar cost averaging
-|   |   |-- arbitrage.py             # Cross-exchange arbitrage
-|   |   |-- market_making.py         # Inventory-aware market making
+|   |   |-- arbitrage.py             # Cross exchange arbitrage
+|   |   |-- market_making.py         # Inventory aware market making
 |   |   |-- pairs_trading.py         # Statistical pairs
 |   |   |-- volume_profile.py        # POC + value area
 |   |   |-- elliott_wave.py          # Wave counting + Fibonacci
@@ -598,7 +598,7 @@ mefai-autotrade/
 |   |
 |   |-- data/
 |   |   |-- __init__.py
-|   |   |-- market_data.py           # Real-time data feed
+|   |   |-- market_data.py           # Real time data feed
 |   |   |-- database.py              # SQLite persistence
 |   |   |-- historical.py            # Historical data loader
 |   |
