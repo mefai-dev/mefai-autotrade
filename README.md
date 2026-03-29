@@ -1,5 +1,8 @@
 # Mefai Autotrade
 
+[![CI](https://github.com/mefai-dev/mefai-autotrade/actions/workflows/ci.yml/badge.svg)](https://github.com/mefai-dev/mefai-autotrade/actions/workflows/ci.yml) [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
+
+
 **Institutional-grade automated trading engine for cryptocurrency markets.**
 
 Built for professional traders and funds that need reliable, battle-tested infrastructure for algorithmic trading across multiple exchanges. Mefai Autotrade combines 20+ trading strategies, advanced portfolio management, intelligent risk controls, and production-grade execution into a single cohesive system.
